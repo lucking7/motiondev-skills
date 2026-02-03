@@ -1,75 +1,52 @@
 ---
 name: motion
-description: Use when building React animations with Motion (Framer Motion) - gestures (drag, hover, tap), scroll effects, spring physics, layout animations, SVG. Bundle: 2.3 KB (mini) to 34 KB (full). Troubleshoot: AnimatePresence exit, list performance, Tailwind conflicts, Next.js "use client".
+description: Animates React, Vue, and JavaScript UIs with gestures, scroll effects, spring physics, and layout transitions. Use when building drag-and-drop, hover effects, scroll animations, modals, carousels, or troubleshooting AnimatePresence exit issues.
 ---
 
 # Motion Animation Library
 
-## Overview
-
-Motion (package: `motion`, formerly `framer-motion`) is the industry-standard animation library for JavaScript, React, and Vue. This skill is extracted from the official **Motion Studio MCP v5.2.0**, containing the complete documentation and 330+ production-ready examples.
-
-**Source**: Official Motion Studio MCP Server
-**Version**: 12.29.x (Latest Stable)
-**Documentation**: 102 pages across JS, React, and Vue platforms
-**Examples**: 330+ production-ready code examples
-
----
-
-## When to Use
-
-**Use when:**
-- Building drag-and-drop interactions
-- Creating scroll-triggered animations or parallax effects
-- Implementing modals, carousels, or accordions with enter/exit animations
-- Adding hover/tap feedback to interactive elements
-- Animating shared elements between routes (layout animations)
-- Working with spring physics or complex easing
-
-**Don't use when:**
-- Simple CSS transitions suffice (opacity, basic transforms)
-- Bundle size is critical and animations are minimal (consider CSS)
-- Server-side rendering without client hydration
-
----
+Motion (package: `motion`, formerly `framer-motion`) is the industry-standard animation library for JavaScript, React, and Vue.
 
 ## Installation
 
 ```bash
-# React / JavaScript
-npm install motion
-
-# Vue
-npm install motion-v
-
-# Or with pnpm
-pnpm add motion
+npm install motion      # React/JS
+npm install motion-v    # Vue
 ```
 
----
+## Platform Quick Reference
 
-## Quick Reference
-
-### JavaScript (Vanilla)
+### JavaScript
 
 ```javascript
-import { animate, scroll, inView, stagger } from "motion"
+import { animate, scroll, inView, stagger, hover, press } from "motion"
 
 // Basic animation
 animate("#box", { x: 100, opacity: 1 })
 
-// With options
-animate("li", { opacity: 0 }, { duration: 0.5, delay: stagger(0.1) })
+// With spring physics
+animate(element, { scale: 1.2 }, { type: "spring", stiffness: 300, damping: 30 })
 
-// Spring animation
-animate(element, { scale: 1.2 }, { type: "spring", stiffness: 300 })
+// Staggered list
+animate("li", { opacity: 1 }, { delay: stagger(0.1) })
 
 // Scroll-linked
 scroll(animate("#progress", { scaleX: [0, 1] }))
 
 // Viewport detection
 inView(".card", ({ target }) => {
-  animate(target, { opacity: 1 })
+  animate(target, { opacity: 1, y: 0 })
+})
+
+// Gestures
+hover(".btn", el => {
+  animate(el, { scale: 1.1 })
+  return () => animate(el, { scale: 1 })
+})
+
+press(".btn", el => {
+  animate(el, { scale: 0.95 })
+  return () => animate(el, { scale: 1 })
 })
 ```
 
@@ -100,13 +77,14 @@ import { motion, AnimatePresence, useScroll, useTransform } from "motion/react"
 // Scroll animations
 const { scrollYProgress } = useScroll()
 const y = useTransform(scrollYProgress, [0, 1], [0, -300])
+<motion.div style={{ y }} />
 ```
 
 ### Vue
 
 ```vue
 <script setup>
-import { motion } from "motion-v"
+import { motion, AnimatePresence } from "motion-v"
 </script>
 
 <template>
@@ -119,72 +97,34 @@ import { motion } from "motion-v"
 </template>
 ```
 
----
-
-## API Reference
-
-### Core Animation APIs
+## Core APIs
 
 | API | Platform | Description |
 |-----|----------|-------------|
-| `animate()` | JS/React/Vue | Main animation function (2.3kb mini / 18kb hybrid) |
+| `animate()` | All | Animate elements with spring/tween |
 | `scroll()` | JS | Scroll-linked animations |
-| `inView()` | JS | Viewport intersection detection |
-| `hover()` | JS | Hover gesture detection |
-| `press()` | JS | Press/tap gesture detection |
-| `stagger()` | All | Stagger timing for multiple elements |
+| `inView()` | JS | Viewport detection |
+| `hover()` | JS | Hover gesture |
+| `press()` | JS | Press/tap gesture |
+| `stagger()` | All | Stagger delays |
 
 ### React-Specific
 
-| Component/Hook | Description |
-|----------------|-------------|
-| `motion.div` | Motion-enhanced HTML/SVG elements |
-| `AnimatePresence` | Exit animation coordinator |
+| API | Description |
+|-----|-------------|
+| `motion.div` | Motion-enhanced elements |
+| `AnimatePresence` | Exit animations |
 | `LayoutGroup` | Coordinate layout animations |
-| `LazyMotion` | Bundle size optimization |
-| `MotionConfig` | Global configuration |
+| `LazyMotion` | Bundle optimization (~4.6kb) |
 | `useMotionValue()` | Reactive animation values |
 | `useTransform()` | Derived motion values |
 | `useSpring()` | Spring-animated values |
-| `useScroll()` | Scroll progress tracking |
-| `useAnimate()` | Imperative animation control |
-| `useInView()` | Viewport detection hook |
-
-### Motion Values
-
-```javascript
-import { motionValue, useMotionValue, useTransform, useSpring } from "motion/react"
-
-// Create motion value
-const x = useMotionValue(0)
-
-// Transform to another value
-const opacity = useTransform(x, [-100, 0, 100], [0, 1, 0])
-
-// Spring-animated value
-const springX = useSpring(x, { stiffness: 300, damping: 30 })
-
-// Use in component
-<motion.div style={{ x, opacity }} />
-```
-
----
+| `useScroll()` | Scroll progress |
+| `useAnimate()` | Imperative control |
 
 ## Transition Options
 
-### Duration-Based (Tween)
-
-```javascript
-{
-  duration: 0.5,
-  ease: "easeInOut", // or [0.4, 0, 0.2, 1]
-  delay: 0.2,
-  repeat: Infinity,
-  repeatType: "reverse" // "loop" | "mirror"
-}
-```
-
-### Physics-Based (Spring)
+### Spring (Physics-based)
 
 ```javascript
 {
@@ -193,32 +133,36 @@ const springX = useSpring(x, { stiffness: 300, damping: 30 })
   damping: 30,       // Higher = less bounce
   mass: 1,           // Higher = more momentum
   bounce: 0.25,      // 0-1, alternative to stiffness/damping
-  visualDuration: 0.5 // Visual duration target
+  visualDuration: 0.5
+}
+```
+
+### Tween (Duration-based)
+
+```javascript
+{
+  duration: 0.5,
+  ease: "easeInOut", // or cubic bezier [0.4, 0, 0.2, 1]
+  delay: 0.2,
+  repeat: Infinity,
+  repeatType: "reverse" // "loop" | "mirror"
 }
 ```
 
 ### Easing Functions
 
-- `"linear"`, `"easeIn"`, `"easeOut"`, `"easeInOut"`
-- `"circIn"`, `"circOut"`, `"circInOut"`
-- `"backIn"`, `"backOut"`, `"backInOut"`
-- `"anticipate"`
-- Custom: `[0.4, 0, 0.2, 1]` (cubic bezier)
-
----
+`"linear"`, `"easeIn"`, `"easeOut"`, `"easeInOut"`, `"circIn"`, `"circOut"`, `"backIn"`, `"backOut"`, `"anticipate"`
 
 ## Common Patterns
 
-### 1. AnimatePresence (Exit Animations)
+### AnimatePresence (Exit Animations)
 
 ```tsx
-import { AnimatePresence, motion } from "motion/react"
-
-// CRITICAL: AnimatePresence must stay mounted
+// CRITICAL: AnimatePresence must stay mounted, children need unique keys
 <AnimatePresence>
   {isVisible && (
     <motion.div
-      key="modal"  // Required unique key
+      key="modal"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -227,7 +171,7 @@ import { AnimatePresence, motion } from "motion/react"
 </AnimatePresence>
 ```
 
-### 2. Layout Animations
+### Layout Animations
 
 ```tsx
 <motion.div layout>
@@ -238,7 +182,7 @@ import { AnimatePresence, motion } from "motion/react"
 <motion.div layoutId="card-123" />
 ```
 
-### 3. Scroll Animations
+### Scroll Animations
 
 ```tsx
 // Viewport-triggered
@@ -254,7 +198,7 @@ const y = useTransform(scrollYProgress, [0, 1], [0, -300])
 <motion.div style={{ y }} />
 ```
 
-### 4. Drag Gestures
+### Drag Gestures
 
 ```tsx
 <motion.div
@@ -266,7 +210,7 @@ const y = useTransform(scrollYProgress, [0, 1], [0, -300])
 />
 ```
 
-### 5. SVG Line Drawing
+### SVG Line Drawing
 
 ```tsx
 <motion.path
@@ -276,11 +220,31 @@ const y = useTransform(scrollYProgress, [0, 1], [0, -300])
 />
 ```
 
----
+### Variants (Orchestration)
 
-## Performance Best Practices
+```tsx
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+}
 
-### 1. Bundle Size Optimization
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+}
+
+<motion.ul variants={container} initial="hidden" animate="show">
+  <motion.li variants={item} />
+  <motion.li variants={item} />
+</motion.ul>
+```
+
+## Performance
+
+### Bundle Size Optimization
 
 ```tsx
 // Full bundle: ~34 KB
@@ -297,16 +261,7 @@ import { LazyMotion, domAnimation, m } from "motion/react"
 import { useAnimate } from "motion/react"
 ```
 
-### 2. Hardware Acceleration
-
-```tsx
-<motion.div
-  style={{ willChange: "transform" }}
-  animate={{ x: 100, rotate: 45 }}
-/>
-```
-
-### 3. Avoid Tailwind Transition Conflicts
+### Avoid Tailwind Conflicts
 
 ```tsx
 // WRONG - causes stuttering
@@ -315,15 +270,6 @@ import { useAnimate } from "motion/react"
 // CORRECT
 <motion.div animate={{ x: 100 }} />
 ```
-
-### 4. Large Lists - Use Virtualization
-
-```bash
-pnpm add react-window
-# or react-virtuoso, @tanstack/react-virtual
-```
-
----
 
 ## Next.js Integration
 
@@ -335,7 +281,7 @@ pnpm add react-window
 import * as motion from "motion/react-client"
 export { motion }
 
-// app/page.tsx (Server Component)
+// app/page.tsx
 import { motion } from "@/components/motion-client"
 ```
 
@@ -344,49 +290,40 @@ import { motion } from "@/components/motion-client"
 ```tsx
 "use client"
 import { motion } from "motion/react"
-
-export function AnimatedCard() {
-  return <motion.div animate={{ opacity: 1 }} />
-}
 ```
-
----
 
 ## Accessibility
 
 ```tsx
 import { MotionConfig } from "motion/react"
 
-// Respect user's reduced motion preference
 <MotionConfig reducedMotion="user">
   <App />
 </MotionConfig>
-
-// Options: "user" | "always" | "never"
 ```
 
----
-
-## Known Issues & Solutions
+## Troubleshooting
 
 ### AnimatePresence Exit Not Working
 
 **Problem**: Exit animations don't play
-**Solution**: AnimatePresence must stay mounted, children need unique keys
+**Causes**:
+1. AnimatePresence unmounts with child
+2. Missing unique `key` prop
+3. Child not direct descendant
 
+**Solution**:
 ```tsx
 // WRONG
 {isVisible && <AnimatePresence><motion.div /></AnimatePresence>}
 
 // CORRECT
 <AnimatePresence>
-  {isVisible && <motion.div key="unique" />}
+  {isVisible && <motion.div key="unique" exit={{ opacity: 0 }} />}
 </AnimatePresence>
 ```
 
 ### Scrollable Container Layout Issues
-
-**Solution**: Add `layoutScroll` prop
 
 ```tsx
 <motion.div layoutScroll style={{ overflow: "auto" }}>
@@ -396,87 +333,33 @@ import { MotionConfig } from "motion/react"
 
 ### Fixed Position Layout Issues
 
-**Solution**: Add `layoutRoot` prop
-
 ```tsx
 <motion.div layoutRoot style={{ position: "fixed" }}>
   <motion.div layout />
 </motion.div>
 ```
 
----
+### Layout Scale Distortion
 
-## Documentation Index
-
-See `references/docs-index.md` for complete list of 102 documentation pages.
-
-### Platform Coverage
-
-| Platform | Docs | Topics |
-|----------|------|--------|
-| JavaScript | 33 | animate, scroll, inView, motionValue, effects |
-| React | 42 | components, hooks, gestures, layout, scroll |
-| Vue | 27 | directives, components, composables |
-
----
-
-## Examples Index
-
-The Motion Studio MCP includes **330+ production-ready examples** covering:
-
-- **Basics**: Animations, springs, easings, stagger
-- **Gestures**: Drag, hover, tap, pan
-- **Layout**: FLIP animations, shared elements
-- **Scroll**: Parallax, progress bars, reveal effects
-- **Components**: Accordions, carousels, modals, tooltips
-- **Integration**: Base UI, Radix, Tailwind, Three.js
-
-### Example Categories
-
-- Dialog & Modal
-- Layout & Grid
-- Forms & Input
-- Navigation
-- Cards & Lists
-- Loading & Progress
-- SVG & Path
-- 3D & WebGL
-- Experimental
-
----
-
-## Related Resources
-
-- **Official Docs**: https://motion.dev/docs
-- **Examples Gallery**: https://motion.dev/examples
-- **GitHub**: https://github.com/motiondivision/motion
-- **npm**: https://www.npmjs.com/package/motion
-
----
-
-## Motion Studio MCP
-
-For enhanced AI integration, install the official Motion Studio MCP:
-
-```json
-{
-  "mcpServers": {
-    "motion": {
-      "command": "npx",
-      "args": ["-y", "https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest"]
-    }
-  }
-}
+```tsx
+// Set borderRadius/boxShadow via style for scale correction
+<motion.div layout style={{ borderRadius: 20, boxShadow: "..." }} />
 ```
 
-Features:
-- Full documentation search
-- 330+ example code queries
-- CSS spring generation
-- Curve visualization
+### Large List Performance
 
----
+Use virtualization libraries: `react-window`, `react-virtuoso`, `@tanstack/react-virtual`
 
-**Skill Version**: 1.0.0
-**Source**: Motion Studio MCP v5.2.0
-**Last Updated**: 2026-02-03
+## Reference Documentation
+
+See `reference/` folder for detailed platform-specific docs:
+- `reference/react.md` - React components and hooks
+- `reference/javascript.md` - Vanilla JS APIs
+- `reference/vue.md` - Vue directives and components
+- `reference/examples.md` - Example index by category
+
+## Resources
+
+- [Official Docs](https://motion.dev/docs)
+- [Examples Gallery](https://motion.dev/examples)
+- [GitHub](https://github.com/motiondivision/motion)
