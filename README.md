@@ -1,68 +1,73 @@
-# Motion MCP Skill
+# Motion Dev Skills
 
-## Source
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Motion](https://img.shields.io/badge/Motion-v5.2.0-purple.svg)](https://motion.dev)
 
-This skill is extracted from the official **Motion Studio MCP Server** (v5.2.0).
+AI agent skill for the **Motion** animation library (formerly Framer Motion). Provides comprehensive documentation, 336 code examples, and best practices for building fluid animations in React, Vue, and vanilla JavaScript.
 
-**Original Package**: `motion-studio-mcp`
-**Registry**: https://api.motion.dev/registry.tgz
-**Version**: Latest (extracted 2026-02-03)
+## Installation
 
-## Contents
+### Claude Code / OpenCode
 
-### Skill Definition
+```bash
+# Clone to your skills directory
+git clone https://github.com/lucking7/motiondev-skills.git ~/skills/motiondev-skills
+```
 
-- `skill.md` - Main skill file with Motion animation library documentation, API reference, and best practices
+Then reference in your agent configuration or load via skill command.
 
-### Reference Files
+## Directory Structure
 
-| File | Description | Source |
-|------|-------------|--------|
-| `references/docs-index.md` | Index of 102 documentation pages | Processed from MCP |
-| `references/docs-metadata.json` | Full metadata for all docs | Processed from MCP |
-| `references/complete-docs.md` | Complete documentation content | Processed from MCP |
-| `references/all-docs-content.md` | All docs combined | Processed from MCP |
-| `references/examples-list.md` | 330+ example index | Processed from MCP |
-| `references/mcp-docs.mjs` | Original MCP docs source | `dist/es/resources/docs.mjs` |
-| `references/mcp-examples.mjs` | Original MCP examples | `dist/es/manifest-examples.mjs` |
-| `references/mcp-docs-manifest.mjs` | Original MCP docs manifest | `dist/es/manifest-docs.mjs` |
+```
+motiondev-skills/
+├── SKILL.md              # Main skill definition (YAML frontmatter + content)
+├── reference/
+│   ├── examples.json     # 336 examples with metadata (116KB)
+│   ├── examples.md       # Examples index for quick lookup
+│   ├── javascript.md     # Vanilla JS patterns
+│   ├── react.md          # React hooks & components
+│   └── vue.md            # Vue 3 composition API
+└── scripts/
+    ├── get-example.sh    # Fetch full example code on-demand
+    └── search-examples.sh # Search examples by keyword
+```
 
 ## Usage
 
-This skill is automatically loaded when the agent uses the `motion` skill.
+### Loading the Skill
 
 ```
 Load skill: motion
 ```
 
-The skill provides:
+### Key Capabilities
 
-1. **Quick Reference** - Common patterns for JS, React, and Vue
-2. **API Reference** - All core APIs and hooks
-3. **Transition Options** - Spring physics and easing configurations
-4. **Common Patterns** - AnimatePresence, Layout, Scroll, Drag, SVG
-5. **Performance Best Practices** - Bundle optimization, hardware acceleration
-6. **Known Issues & Solutions** - Common pitfalls and fixes
+| Feature | Description |
+|---------|-------------|
+| **Quick Reference** | Common patterns for JS, React, Vue |
+| **API Documentation** | All core APIs, hooks, and components |
+| **336 Examples** | Searchable index with on-demand fetching |
+| **Spring Physics** | Transition options and easing configs |
+| **Best Practices** | Performance optimization, common pitfalls |
 
-## Updating
-
-To update from the latest Motion Studio MCP:
+### Fetching Examples
 
 ```bash
-# Download latest package
-npm pack https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest
+# Search examples
+./scripts/search-examples.sh "drag"
 
-# Extract and copy files
-tar -xzf motion-studio-mcp-*.tgz
-cp package/dist/es/resources/docs.mjs references/mcp-docs.mjs
-cp package/dist/es/manifest-examples.mjs references/mcp-examples.mjs
-cp package/dist/es/manifest-docs.mjs references/mcp-docs-manifest.mjs
-
-# Clean up
-rm -rf package motion-studio-mcp-*.tgz
+# Get full example code
+./scripts/get-example.sh scroll-triggered-animations
 ```
+
+## Data Source
+
+Extracted from the official **Motion Studio MCP Server** (v5.2.0):
+- Package: `motion-studio-mcp`
+- Registry: https://api.motion.dev
 
 ## License
 
-Motion is licensed under the Motion License.
-See: https://github.com/motiondivision/motion/blob/main/LICENSE.md
+This skill package is MIT licensed.
+
+Motion library is licensed under the [Motion License](https://github.com/motiondivision/motion/blob/main/LICENSE.md).
