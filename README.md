@@ -12,17 +12,16 @@ npx skills add lucking7/motiondev-skills@motion
 
 ```
 skills/
-└── motion/
-    ├── SKILL.md           # Main skill file
-    ├── reference/         # API documentation
-    │   ├── react.md
-    │   ├── javascript.md
-    │   ├── vue.md
-    │   ├── examples.md    # 336 examples index
-    │   └── examples.json  # Examples metadata
-    └── scripts/
-        ├── get-example.sh
-        └── search-examples.sh
+├── SKILL.md           # Main skill file
+├── reference/         # API documentation
+│   ├── react.md
+│   ├── javascript.md
+│   ├── vue.md
+│   ├── examples.md    # 336 examples index
+│   └── examples.json  # Examples metadata
+└── scripts/
+    ├── get-example.sh
+    └── search-examples.sh
 ```
 
 ## Usage
